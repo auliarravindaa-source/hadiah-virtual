@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everything You Are - Hadiah Virtual</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f8c8dc; /* soft pink dari foto */
+            --secondary-color: #e6d7ff; /* ungu muda dari foto */
+            --accent-color: #fff8f0; /* putih gading dari foto */
+            --text-color: #4a4a4a;
+            --hindia-dark: #3a3a3a;
+            --hindia-accent: #d4a5a5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .cover {
+            background-color: var(--accent-color);
+            border-radius: 20px;
+            padding: 40px 25px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cover::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://picsum.photos/seed/birds-flying/800/600.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        .cover-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cover h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--hindia-dark);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .cover p {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: var(--hindia-dark);
+            opacity: 0.8;
+        }
+        
+        .cover-icon {
+            font-size: 42px;
+            color: var(--hindia-accent);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .hint {
+            font-size: 14px;
+            color: #888;
+            font-style: italic;
+        }
+        
+        .letter {
+            background-color: var(--accent-color);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .letter::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="rgba(255,255,255,0.1)" d="M50,15 C65,15 75,25 75,40 C75,55 65,70 50,85 C35,70 25,55 25,40 C25,25 35,15 50,15 Z"/></svg>');
+            background-repeat: repeat;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        .letter-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .letter-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 15px;
+            text-align: center;
+        }
+        
+        .letter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--hindia-dark);
+        }
+        
+        .message {
+            background: white;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .message.active {
+            box-shadow: 0 8px 20px rgba(212, 165, 165, 0.3);
+            border: 1px solid var(--hindia-accent);
+        }
+        
+        .message p {
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 0;
+            color: var(--hindia-dark);
+        }
+        
+        .message-hint {
+            position: absolute;
+            bottom: -20px;
+            right: 10px;
+            font-size: 12px;
+            color: var(--hindia-accent);
+            opacity: 0.7;
+            font-style: italic;
+        }
+        
+        .letter-footer {
+            margin-top: 25px;
+            text-align: right;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--hindia-dark);
+            opacity: 0.8;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.7);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 3;
+        }
+        
+        .close-btn i {
+            color: var(--hindia-dark);
+        }
+        
+        .floating-hearts {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 10;
+        }
+        
+        .heart {
+            color: rgba(212, 165, 165, 0.7);
+            font-size: 24px;
+            margin-bottom: 10px;
+            animation: float-up 4s linear infinite;
+            opacity: 0;
+        }
+        
+        .heart:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .heart:nth-child(2) {
+            animation-delay: 1s;
+        }
+        
+        .heart:nth-child(3) {
+            animation-delay: 2s;
+        }
+        
+        .heart:nth-child(4) {
+            animation-delay: 3s;
+        }
+        
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        .bird-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 50px;
+            z-index: 1;
+        }
+        
+        .bird {
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform-origin: center;
+        }
+        
+        .bird::before {
+            content: "";
+            position: absolute;
+            top: 8px;
+            left: -15px;
+            width: 15px;
+            height: 8px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform: rotate(-30deg);
+        }
+        
+        .bird::after {
+            content: "";
+            position: absolute;
+            top: 8px;
+            right: -15px;
+            width: 15px;
+            height: 8px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform: rotate(30deg);
+        }
+        
+        .bird1 {
+            top: 0;
+            left: 0;
+            animation: fly1 15s infinite linear;
+        }
+        
+        .bird2 {
+            top: 20px;
+            left: 30px;
+            animation: fly2 18s infinite linear;
+        }
+        
+        @keyframes fly1 {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
+            25% {
+                transform: translateX(50px) translateY(-10px);
+            }
+            50% {
+                transform: translateX(100px) translateY(5px);
+            }
+            75% {
+                transform: translateX(50px) translateY(-5px);
+            }
+            100% {
+                transform: translateX(0) translateY(0);
+            }
+        }
+        
+        @keyframes fly2 {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
+            25% {
+                transform: translateX(-40px) translateY(10px);
+            }
+            50% {
+                transform: translateX(-80px) translateY(-5px);
+            }
+            75% {
+                transform: translateX(-40px) translateY(5px);
+            }
+            100% {
+                transform: translateX(0) translateY(0);
+            }
+        }
+        
+        /* Loading indicator */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(212, 165, 165, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--hindia-accent);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: var(--hindia-dark);
+            font-size: 16px;
+        }
+        
+        /* YouTube Player */
+        .youtube-container {
+            margin-top: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .youtube-container iframe {
+            width: 100%;
+            height: 180px;
+            border: none;
+        }
+        
+        .youtube-toggle {
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .youtube-toggle button {
+            background: var(--hindia-accent);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .youtube-toggle button:hover {
+            background: #c49595;
+        }
+        
+        /* Progress indicator */
+        .progress-container {
+            margin-top: 20px;
+            height: 6px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--hindia-accent);
+            border-radius: 3px;
+            width: 14.28%; /* 1/7 untuk 7 pesan */
+            transition: width 0.5s ease;
+        }
+        
+        /* Text between messages and YouTube button */
+        .middle-text {
+            text-align: center;
+            margin: 25px 0;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--hindia-dark);
+            font-size: 18px;
+            position: relative;
+            padding: 0 20px;
+        }
+        
+        .middle-text::before,
+        .middle-text::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            height: 1px;
+            background: var(--hindia-accent);
+            opacity: 0.5;
+        }
+        
+        .middle-text::before {
+            left: -20px;
+        }
+        
+        .middle-text::after {
+            right: -20px;
+        }
+        
+        /* Special message with photo */
+        .message-with-photo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .message-with-photo .message-text {
+            flex: 1;
+        }
+        
+        .message-with-photo .message-photo {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .message-with-photo .message-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Memuat hadiah virtual...</div>
+    </div>
+    
+    <div class="container">
+        <div class="cover" id="cover">
+            <div class="bird-container">
+                <div class="bird bird1"></div>
+                <div class="bird bird2"></div>
+            </div>
+            <div class="cover-content">
+                <div class="cover-icon">
+                    <i class="fas fa-envelope-open-heart"></i>
+                </div>
+                <h1>Something Special For You</h1>
+                <p>A little something to brighten your day</p>
+                <p class="hint">Klik untuk membuka <i class="fas fa-hand-pointer"></i></p>
+            </div>
+        </div>
+        
+        <div class="letter" id="letter">
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="letter-content">
+                <div class="letter-header">
+                    <div class="letter-title">My Letter For You</div>
+                </div>
+                
+                <div class="message active show" id="message1">
+                    <p>"Halo Mas.. <span style="color: #e63946;">&lt;3</span>"</p>
+                    <div class="message-hint">Klik untuk melanjutkan <i class="fas fa-hand-pointer"></i></div>
+                </div>
+                
+                <div class="message" id="message2">
+                    <p>"Di balik semua hal yang kamu lakuin, aku tahu... kamu selalu berusaha yang terbaik"</p>
+                    <div class="message-hint">Klik untuk melanjutkan <i class="fas fa-hand-pointer"></i></div>
+                </div>
+                
+                <div class="message" id="message3">
+                    <div class="message-with-photo">
+                        <div class="message-text">
+                            <p>"Kamu gak harus jadi sempurna, cukup jadi kamu—karena itu yang paling aku butuhin."</p>
+                        </div>
+                        <div class="message-photo">
+                            <img src="https://picsum.photos/seed/man-selfie/200/200.jpg" alt="Selfie di toko pakaian">
+                        </div>
+                    </div>
+                    <div class="message-hint">Klik untuk melanjutkan <i class="fas fa-hand-pointer"></i></div>
+                </div>
+                
+                <div class="message" id="message4">
+                    <p>"Aku mungkin gak selalu bilang, tapi setiap hari aku bersyukur karena ada kamu"</p>
+                    <div class="message-hint">Klik untuk melanjutkan <i class="fas fa-hand-pointer"></i></div>
+                </div>
+                
+                <div class="message" id="message5">
+                    <p>"Aku suka saat kamu cerita. Bukan cuma karena isinya, tapi karena itu bikin aku lebih kenal kamu."</p>
+                    <div class="message-hint">Klik untuk melanjutkan <i class="fas fa-hand-pointer"></i></div>
+                </div>
+                
+                <div class="message" id="message6">
+                    <p>"Kamu gak harus nunjukin apa-apa ke dunia. Buatku, kamu udah cukup lebih dari cukup"</p>
+                    <div class="message-hint">Klik untuk melanjutkan <i class="fas fa-hand-pointer"></i></div>
+                </div>
+                
+                <div class="message" id="message7">
+                    <p>"Kalau kamu tanya kenapa aku sayang kamu... jawabannya ada di setiap hal kecil yang kamu lakuin tanpa sadar."</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="middle-text">
+                    Untuk kamu yang jauh di sana...
+                </div>
+                
+                <div class="letter-footer">
+                    From: Vania
+                </div>
+                
+                <div class="youtube-container" id="youtubeContainer">
+                    <iframe id="youtubeFrame" src="" allowfullscreen></iframe>
+                </div>
+                
+                <div class="youtube-toggle">
+                    <button id="youtubeToggle">Putar Lagu "Hindia - Everything You Are"</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="floating-hearts">
+        <div class="heart"><i class="fas fa-heart"></i></div>
+        <div class="heart"><i class="fas fa-heart"></i></div>
+        <div class="heart"><i class="fas fa-heart"></i></div>
+        <div class="heart"><i class="fas fa-heart"></i></div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cover = document.getElementById('cover');
+            const letter = document.getElementById('letter');
+            const closeBtn = document.getElementById('closeBtn');
+            const loading = document.getElementById('loading');
+            const youtubeContainer = document.getElementById('youtubeContainer');
+            const youtubeFrame = document.getElementById('youtubeFrame');
+            const youtubeToggle = document.getElementById('youtubeToggle');
+            const progressBar = document.getElementById('progressBar');
+            
+            // YouTube video ID
+            const youtubeVideoId = 'lB8ASupNtlw';
+            
+            // Current message index
+            let currentMessageIndex = 1;
+            const totalMessages = 7;
+            
+            // Sembunyikan loading setelah halaman dimuat
+            window.addEventListener('load', function() {
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, 1000);
+            });
+            
+            cover.addEventListener('click', function() {
+                cover.style.display = 'none';
+                letter.style.display = 'block';
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                letter.style.display = 'none';
+                cover.style.display = 'block';
+                
+                // Reset ke pesan pertama
+                resetToFirstMessage();
+            });
+            
+            // Fungsi untuk mereset ke pesan pertama
+            function resetToFirstMessage() {
+                // Sembunyikan semua pesan
+                const messages = document.querySelectorAll('.message');
+                messages.forEach(message => {
+                    message.classList.remove('show', 'active');
+                });
+                
+                // Tampilkan pesan pertama
+                document.getElementById('message1').classList.add('show', 'active');
+                
+                // Reset progress bar
+                progressBar.style.width = '14.28%';
+                
+                // Reset index
+                currentMessageIndex = 1;
+                
+                // Reset YouTube player
+                youtubeContainer.style.display = 'none';
+                youtubeToggle.textContent = 'Putar Lagu "Hindia - Everything You Are"';
+            }
+            
+            // Tambahkan event listener untuk setiap pesan
+            for (let i = 1; i <= totalMessages; i++) {
+                const message = document.getElementById(`message${i}`);
+                
+                message.addEventListener('click', function() {
+                    if (i < totalMessages) {
+                        // Sembunyikan pesan saat ini
+                        message.classList.remove('active');
+                        
+                        // Tampilkan pesan berikutnya
+                        const nextMessage = document.getElementById(`message${i + 1}`);
+                        nextMessage.classList.add('show', 'active');
+                        
+                        // Update progress bar
+                        currentMessageIndex = i + 1;
+                        const progressPercentage = (currentMessageIndex / totalMessages) * 100;
+                        progressBar.style.width = `${progressPercentage}%`;
+                    }
+                });
+            }
+            
+            youtubeToggle.addEventListener('click', function() {
+                if (youtubeContainer.style.display === 'none' || youtubeContainer.style.display === '') {
+                    youtubeFrame.src = 'https://www.youtube.com/embed/' + youtubeVideoId + '?autoplay=1';
+                    youtubeContainer.style.display = 'block';
+                    youtubeToggle.textContent = 'Hentikan Lagu';
+                } else {
+                    youtubeFrame.src = '';
+                    youtubeContainer.style.display = 'none';
+                    youtubeToggle.textContent = 'Putar Lagu "Hindia - Everything You Are"';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
